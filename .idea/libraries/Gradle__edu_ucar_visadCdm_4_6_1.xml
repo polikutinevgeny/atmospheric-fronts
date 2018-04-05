@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.ucar:visadCdm:4.6.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/visadCdm/4.6.1/8eaf0ecb8bf1d6ddf2cb6bb0394bd0dbcadcfc53/visadCdm-4.6.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/visadCdm/4.6.1/d4405b31b13dae8c8b788e7eb5b039d9d8e6fefc/visadCdm-4.6.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

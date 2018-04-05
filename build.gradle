@@ -32,12 +32,26 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url "https://artifacts.unidata.ucar.edu/repository/unidata-all/"
+    }
 }
+
+def netcdfJavaVersion = "4.6.1"
+def slf4jVersion = "1.7.25"
 
 dependencies {
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: "$kotlin_version"
     runtime group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: "$kotlin_version"
     runtime "org.jetbrains.kotlin:kotlin-runtime:$kotlin_version"
+    implementation "edu.ucar:cdm:${netcdfJavaVersion}"
+    runtime "org.slf4j:slf4j-jdk14:${slf4jVersion}"
+    runtime "edu.ucar:bufr:${netcdfJavaVersion}"
+    runtime "edu.ucar:clcommon:${netcdfJavaVersion}"
+    runtime "edu.ucar:grib:${netcdfJavaVersion}"
+    runtime "edu.ucar:netcdf4:${netcdfJavaVersion}"
+    runtime "edu.ucar:opendap:${netcdfJavaVersion}"
+    runtime "edu.ucar:visadCdm:${netcdfJavaVersion}"
 //    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
