@@ -1,7 +1,6 @@
 package com.gmail.polikutinevgeny.files
 
 import com.gmail.polikutinevgeny.fields.FieldInterface
-import ucar.ma2.ArrayFloat
 import ucar.ma2.Range
 import ucar.nc2.NetcdfFile
 import ucar.nc2.Variable
@@ -14,7 +13,7 @@ class FileReader(filename: String) {
         readIsobaricVariable(name: String,
                              isobaric: Double,
                              boundaries: GeoBoundaries,
-                             factory: (DoubleArray, DoubleArray, (Int, Int) -> Double) -> Field): Field {
+                             factory: (DoubleArray, DoubleArray, DoubleArray) -> Field): Field {
         val variable: Variable = variables.find { it -> it.fullName == name }!!
         if (variable.rank != 4) {
             throw IllegalArgumentException(
@@ -48,9 +47,7 @@ class FileReader(filename: String) {
         val lonData = lon.read(
             mutableListOf(boundaries.getLonRange(lon))).get1DJavaArray(
             Double::class.java) as DoubleArray
-        val result = variable.read(params)
-        return factory(latData, lonData, { i, j ->
-            (result as ArrayFloat.D4).get(0, 0, i, j).toDouble()
-        })
+        return factory(latData, lonData, variable.read(params).get1DJavaArray(
+            Double::class.java) as DoubleArray)
     }
 }
