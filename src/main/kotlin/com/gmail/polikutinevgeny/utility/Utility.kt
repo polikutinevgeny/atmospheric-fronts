@@ -1,7 +1,8 @@
 package com.gmail.polikutinevgeny.utility
 
-import kotlin.math.*
 import com.gmail.polikutinevgeny.fields.FieldInterface
+import java.awt.geom.Point2D
+import kotlin.math.*
 
 object Constants {
     /**
@@ -27,19 +28,17 @@ object Constants {
     const val EARTH_ROTATION_RATE: Double = 7.2921e-5
 }
 
-fun equivalentPotentialTemperature(temperature: Array<DoubleArray>,
-                                   specHumidity: Array<DoubleArray>,
-                                   pressure: Double): Array<DoubleArray> {
-    return Array(temperature.size, { i ->
-        DoubleArray(temperature[i].size, { j ->
-            val e = pressure / (622 + specHumidity[i][j])
-            val tl = 2840.0 / (3.5 * ln(temperature[i][j]) - ln(
-                e) - 4.805) + 55.0
-            temperature[i][j] * (1000.0 / pressure).pow(
-                0.2854 * (1.0 - 0.28 * 0.001 * specHumidity[i][j])) *
-                exp((3.376 / tl - 0.00254) * specHumidity[i][j] * (1 + 0.81 * 0.001 * specHumidity[i][j]))
-        })
-    })
+fun equivalentPotentialTemperature(temperature: FieldInterface,
+                                   specHumidity: FieldInterface,
+                                   pressure: Double): FieldInterface {
+    return temperature.clone { i, j ->
+        val e = pressure / (622 + specHumidity[i, j])
+        val tl = 2840.0 / (3.5 * ln(temperature[i, j]) - ln(
+            e) - 4.805) + 55.0
+        temperature[i, j] * (1000.0 / pressure).pow(
+            0.2854 * (1.0 - 0.28 * 0.001 * specHumidity[i, j])) *
+            exp((3.376 / tl - 0.00254) * specHumidity[i, j] * (1 + 0.81 * 0.001 * specHumidity[i, j]))
+    }
 }
 
 /**
@@ -131,8 +130,8 @@ fun coriolis(lat: Double): Double {
  * */
 fun gradient(field: FieldInterface): Pair<FieldInterface, FieldInterface> {
     val (xSize, ySize) = field.size
-    val resultLat = field.blankClone()
-    val resultLon = field.blankClone()
+    val resultLat = field.clone()
+    val resultLon = field.clone()
     val latitude = field.xCoordinates
     val longitude = field.yCoordinates
     for (i in 1..xSize - 2) {
@@ -194,7 +193,7 @@ fun gradient(field: FieldInterface): Pair<FieldInterface, FieldInterface> {
 
 fun absValue(vecField: Pair<FieldInterface, FieldInterface>): FieldInterface {
     val (lat, lon) = vecField
-    val result = lat.blankClone()
+    val result = lat.clone()
     val (xSize, ySize) = result.size
     for (i in 0 until xSize) {
         for (j in 0 until ySize) {
@@ -231,7 +230,7 @@ fun gradientAbs(field: FieldInterface): FieldInterface =
  * */
 fun vecVorticity(ufield: FieldInterface,
                       vfield: FieldInterface): FieldInterface {
-    val result = ufield.blankClone()
+    val result = ufield.clone()
     val (latu, _) = gradient(ufield)
     val (_, lonv) = gradient(vfield)
     val (xSize, ySize) = result.size
@@ -242,4 +241,14 @@ fun vecVorticity(ufield: FieldInterface,
         }
     }
     return result
+}
+
+typealias Front = MutableList<Point2D.Double>
+
+fun Front.toCSV(): String {
+    var s = "${this.first().x}, ${this.first().y}"
+    for (c in this.asSequence().drop(1)) {
+        s += ", ${c.x}, ${c.y}"
+    }
+    return s
 }

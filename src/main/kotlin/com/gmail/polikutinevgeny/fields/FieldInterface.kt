@@ -5,7 +5,6 @@ interface FieldInterface {
     val yCoordinates: DoubleArray
     operator fun get(i: Int, j: Int): Double
     operator fun set(i: Int, j: Int, value: Double)
-    fun blankClone(): FieldInterface
     val size: Pair<Int, Int>
-    fun filledClone(init: (Int, Int) -> Double): FieldInterface
+    fun clone(init: ((Int, Int) -> Double)? = null): FieldInterface
 }

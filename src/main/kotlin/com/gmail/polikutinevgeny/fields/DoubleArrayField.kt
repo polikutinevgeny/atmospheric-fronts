@@ -4,8 +4,17 @@ class DoubleArrayField(override val xCoordinates: DoubleArray,
                        override val yCoordinates: DoubleArray,
                        private val dataArray: Array<DoubleArray>) :
     FieldInterface {
-    override fun filledClone(init: (Int, Int) -> Double): FieldInterface {
-        return DoubleArrayField(xCoordinates, yCoordinates, init)
+    companion object Factory {
+        fun create(xCoordinates: DoubleArray,
+                   yCoordinates: DoubleArray,
+                   init: (Int, Int) -> Double): DoubleArrayField {
+            return DoubleArrayField(xCoordinates, yCoordinates, init)
+        }
+    }
+
+    override fun clone(init: ((Int, Int) -> Double)?): FieldInterface {
+        return DoubleArrayField(xCoordinates, yCoordinates,
+            init ?: { _, _ -> 0.0 })
     }
 
     constructor(xCoordinates: DoubleArray,
@@ -23,11 +32,5 @@ class DoubleArrayField(override val xCoordinates: DoubleArray,
 
     override operator fun set(i: Int, j: Int, value: Double) {
         dataArray[i][j] = value
-    }
-
-    override fun blankClone(): DoubleArrayField {
-        return DoubleArrayField(xCoordinates.clone(), yCoordinates.clone(),
-            Array(xCoordinates.size,
-                { _ -> DoubleArray(yCoordinates.size, { _ -> 0.0 }) }))
     }
 }

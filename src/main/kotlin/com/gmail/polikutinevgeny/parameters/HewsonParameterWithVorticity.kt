@@ -1,7 +1,10 @@
 package com.gmail.polikutinevgeny.parameters
 
 import com.gmail.polikutinevgeny.fields.FieldInterface
-import com.gmail.polikutinevgeny.utility.*
+import com.gmail.polikutinevgeny.utility.absValue
+import com.gmail.polikutinevgeny.utility.coriolis
+import com.gmail.polikutinevgeny.utility.gradient
+import com.gmail.polikutinevgeny.utility.vecVorticity
 import kotlin.math.sqrt
 
 class HewsonParameterWithVorticity(
@@ -22,12 +25,12 @@ class HewsonParameterWithVorticity(
     private val temperatureGradientGradient: FieldInterface = absValue(
         temperatureGradientGradientVec)
 
-    override val value: FieldInterface = temperature.filledClone { i, j ->
+    override val value: FieldInterface = temperature.clone { i, j ->
         -(temperatureGradientVec.first[i, j] * temperatureGradientGradientVec.first[i, j] +
             temperatureGradientVec.second[i, j] * temperatureGradientGradientVec.second[i, j]) / temperatureGradient[i, j]
     }
     override val mask: FieldInterface
-        get() = temperature.filledClone { i, j ->
+        get() = temperature.clone { i, j ->
             if (value[i, j] >= tfpThreshold &&
                 temperatureGradient[i, j] + 100 * temperatureGradientGradient[i, j] / sqrt(2.0) >= gradientThreshold &&
                 vorticity[i, j] / coriolis(vorticity.xCoordinates[i]) > vorticityThreshold) 1.0 else 0.0

@@ -1,11 +1,10 @@
 package com.gmail.polikutinevgeny.ridgedetection
 
 import com.gmail.polikutinevgeny.fields.FieldInterface
+import com.gmail.polikutinevgeny.utility.Front
 import com.gmail.polikutinevgeny.utility.sphereAngle
-import java.awt.geom.Point2D.Double as Point
 import java.awt.Point as IntPoint
-
-typealias Front = MutableList<Point>
+import java.awt.geom.Point2D.Double as Point
 
 private operator fun IntPoint.component1(): Int {
     return this.x
@@ -17,7 +16,7 @@ private operator fun IntPoint.component2(): Int {
 }
 
 class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
-                    val field: FieldInterface) {
+                    val field: FieldInterface, var mask: FieldInterface) {
     companion object {
         /**
          * Moving directions (counterclockwise!)
@@ -33,10 +32,11 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
     val detectedFronts: MutableList<Front> = mutableListOf()
 
     init {
-
+        ridgeDetection()
     }
 
     private fun ridgeDetection() {
+        detectedFronts.clear()
         val sups = mutableListOf<IntPoint>()
         val (xSize, ySize) = field.size
         val count = Array(xSize, { _ -> IntArray(ySize, { _ -> 0 }) })
@@ -119,6 +119,9 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
 
         for (i in 1..xSize - 2) {
             for (j in 1..ySize - 2) {
+                if (mask[i, j] < 1.0) {
+                    continue
+                }
                 val position = IntPoint(i, j)
                 count[i][j] = DIRECTIONS.count { isSuperior(position, it) }
                 if (count[i][j] == 5) {

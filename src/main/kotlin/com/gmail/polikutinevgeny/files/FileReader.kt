@@ -1,22 +1,24 @@
 package com.gmail.polikutinevgeny.files
 
-import com.gmail.polikutinevgeny.fields.DoubleArrayField
-import ucar.ma2.Index
+import com.gmail.polikutinevgeny.fields.FieldInterface
+import ucar.ma2.ArrayFloat
 import ucar.ma2.Range
-
 import ucar.nc2.NetcdfFile
 import ucar.nc2.Variable
-import java.io.IOException
 
 class FileReader(filename: String) {
     private val file: NetcdfFile = NetcdfFile.open(filename)
     private val variables: MutableList<Variable> = file.variables
 
-    fun readIsobaricVariable(name: String, isobaric: Double,
-                             boundaries: GeoBoundaries): DoubleArrayField {
+    fun <Field : FieldInterface>
+        readIsobaricVariable(name: String,
+                             isobaric: Double,
+                             boundaries: GeoBoundaries,
+                             factory: (DoubleArray, DoubleArray, (Int, Int) -> Double) -> Field): Field {
         val variable: Variable = variables.find { it -> it.fullName == name }!!
         if (variable.rank != 4) {
-            throw IllegalArgumentException("Variable '$variable' doesn't have 4 dimensions")
+            throw IllegalArgumentException(
+                "Variable '$variable' doesn't have 4 dimensions")
         }
         val dimNames = variable.dimensionsString.split(" ")
         val timeName = dimNames.find { it.matches(Regex("time.*")) }
@@ -31,7 +33,8 @@ class FileReader(filename: String) {
             add(variable.findDimensionIndex(timeName), getRange(time, 0.0, 0.0))
             val range = getRange(iso, isobaric, isobaric)
             if (range.first() != range.last()) {
-                throw IllegalArgumentException("Isobaric surface $isobaric not found")
+                throw IllegalArgumentException(
+                    "Isobaric surface $isobaric not found")
             }
             add(variable.findDimensionIndex(isobaricName), range)
             add(variable.findDimensionIndex(latName),
@@ -39,11 +42,15 @@ class FileReader(filename: String) {
             add(variable.findDimensionIndex(lonName),
                 boundaries.getLonRange(lon))
         }
-        val latData = lat.read(mutableListOf(boundaries.getLatRange(lat))).get1DJavaArray(Double::class.java) as DoubleArray
-        val lonData = lon.read(mutableListOf(boundaries.getLonRange(lon))).get1DJavaArray(Double::class.java) as DoubleArray
+        val latData = lat.read(
+            mutableListOf(boundaries.getLatRange(lat))).get1DJavaArray(
+            Double::class.java) as DoubleArray
+        val lonData = lon.read(
+            mutableListOf(boundaries.getLonRange(lon))).get1DJavaArray(
+            Double::class.java) as DoubleArray
         val result = variable.read(params)
-        return DoubleArrayField(latData, lonData, {i, j ->
-            result.getDouble(Index.factory(intArrayOf(0, 0, i, j)))
+        return factory(latData, lonData, { i, j ->
+            (result as ArrayFloat.D4).get(0, 0, i, j).toDouble()
         })
     }
 }
