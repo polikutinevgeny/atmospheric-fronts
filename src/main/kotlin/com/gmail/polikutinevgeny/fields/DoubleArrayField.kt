@@ -2,9 +2,7 @@ package com.gmail.polikutinevgeny.fields
 
 class DoubleArrayField(override val xCoordinates: DoubleArray,
                        override val yCoordinates: DoubleArray,
-                       data: DoubleArray) : FieldInterface {
-
-    private val data = data
+                       private val data: DoubleArray) : FieldInterface {
 
     constructor(xCoordinates: DoubleArray,
                 yCoordinates: DoubleArray,

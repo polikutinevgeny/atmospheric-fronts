@@ -25,7 +25,8 @@ class FrontSimplifier {
         return Math.hypot(ax, ay)
     }
 
-    fun RamerDouglasPeucker(pointList: List<Point>, epsilon: Double): MutableList<Point> {
+    fun ramerDouglasPeucker(pointList: List<Point>,
+                            epsilon: Double): MutableList<Point> {
         if (pointList.size < 2) throw IllegalArgumentException("Not enough points to simplify")
         val out = mutableListOf<Point>()
         // Find the point with the maximum distance from line between start and end
@@ -43,8 +44,8 @@ class FrontSimplifier {
         if (dmax > epsilon) {
             val firstLine = pointList.take(index + 1)
             val lastLine = pointList.drop(index)
-            val recResults1 = RamerDouglasPeucker(firstLine, epsilon)
-            val recResults2 = RamerDouglasPeucker(lastLine, epsilon)
+            val recResults1 = ramerDouglasPeucker(firstLine, epsilon)
+            val recResults2 = ramerDouglasPeucker(lastLine, epsilon)
 
             // build the result list
             out.addAll(recResults1.take(recResults1.size - 1))
