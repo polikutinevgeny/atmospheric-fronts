@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.boofcv:boofcv-core:0.29">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.boofcv/boofcv-core/0.29/407a1040f76b9c9de74834fe5114120cef3a9a12/boofcv-core-0.29.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.boofcv/boofcv-core/0.29/83e9c0f73ca922056ff3ec3aa478e0899a574022/boofcv-core-0.29-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

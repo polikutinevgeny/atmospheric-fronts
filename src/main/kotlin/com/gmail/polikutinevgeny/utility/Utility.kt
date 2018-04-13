@@ -3,6 +3,23 @@ package com.gmail.polikutinevgeny.utility
 import com.gmail.polikutinevgeny.fields.FieldInterface
 import java.awt.geom.Point2D
 import kotlin.math.*
+import java.awt.geom.Point2D.Double as Point
+
+operator fun java.awt.Point.component1(): Int {
+    return this.x
+}
+
+operator fun java.awt.Point.component2(): Int {
+    return this.y
+}
+
+operator fun java.awt.geom.Point2D.Double.component1(): Double {
+    return this.x
+}
+
+operator fun java.awt.geom.Point2D.Double.component2(): Double {
+    return this.y
+}
 
 object Constants {
     /**
@@ -53,8 +70,8 @@ fun equivalentPotentialTemperature(temperature: FieldInterface,
  * @author Evgeny Polikutin
  *
  * */
-private fun sphereAngleDistance(from: Pair<Double, Double>,
-                                to: Pair<Double, Double>): Double {
+private fun sphereAngleDistance(from: Point,
+                                to: Point): Double {
     val (lat1, lon1) = from
     val (lat2, lon2) = to
     val l1 = Math.toRadians(lat1)
@@ -77,8 +94,8 @@ private fun sphereAngleDistance(from: Pair<Double, Double>,
  * @author Evgeny Polikutin
  *
  * */
-fun earthDistance(from: Pair<Double, Double>,
-                  to: Pair<Double, Double>): Double {
+fun earthDistance(from: Point,
+                  to: Point): Double {
     return Constants.EARTH_MEAN_RADIUS * sphereAngleDistance(from, to)
 }
 
@@ -95,8 +112,8 @@ fun earthDistance(from: Pair<Double, Double>,
  * @author Evgeny Polikutin
  *
  * */
-fun sphereAngle(p1: Pair<Double, Double>, p2: Pair<Double, Double>,
-                p3: Pair<Double, Double>): Double {
+fun sphereAngle(p1: Point, p2: Point,
+                p3: Point): Double {
     val a = sphereAngleDistance(p2, p3)
     val b = sphereAngleDistance(p1, p3)
     val c = sphereAngleDistance(p1, p2)
@@ -139,12 +156,12 @@ fun gradient(field: FieldInterface): Pair<FieldInterface, FieldInterface> {
             // Minus is to change the direction
             resultLat[i, j] = -(field[i + 1, j] - field[i - 1, j]) /
                 earthDistance(
-                    Pair(latitude[i + 1], longitude[j]),
-                    Pair(latitude[i - 1], longitude[j]))
+                    Point(latitude[i + 1], longitude[j]),
+                    Point(latitude[i - 1], longitude[j]))
             resultLon[i, j] = (field[i, j + 1] - field[i, j - 1]) /
                 earthDistance(
-                    Pair(latitude[i], longitude[j + 1]),
-                    Pair(latitude[i], longitude[j - 1]))
+                    Point(latitude[i], longitude[j + 1]),
+                    Point(latitude[i], longitude[j - 1]))
         }
     }
     // Here goes calculation in the edge points via directed diffs. It is not pretty.
@@ -153,39 +170,39 @@ fun gradient(field: FieldInterface): Pair<FieldInterface, FieldInterface> {
         if (i != 0 && i != xSize - 1) {
             resultLat[i, 0] = -(field[i + 1, 0] - field[i - 1, 0]) /
                 earthDistance(
-                    Pair(latitude[i + 1], longitude[0]),
-                    Pair(latitude[i - 1], longitude[0]))
+                    Point(latitude[i + 1], longitude[0]),
+                    Point(latitude[i - 1], longitude[0]))
             resultLat[i, l] = -(field[i + 1, l] - field[i - 1, l]) /
                 earthDistance(
-                    Pair(latitude[i + 1], longitude[l]),
-                    Pair(latitude[i - 1], longitude[l]))
+                    Point(latitude[i + 1], longitude[l]),
+                    Point(latitude[i - 1], longitude[l]))
         }
         resultLon[i, 0] = (field[i, 1] - field[i, 0]) /
-            earthDistance(Pair(latitude[i], longitude[1]),
-                Pair(latitude[i], longitude[0]))
+            earthDistance(Point(latitude[i], longitude[1]),
+                Point(latitude[i], longitude[0]))
         resultLon[i, l] = (field[i, l] - field[i, l - 1]) /
-            earthDistance(Pair(latitude[i], longitude[l]),
-                Pair(latitude[i], longitude[l - 1]))
+            earthDistance(Point(latitude[i], longitude[l]),
+                Point(latitude[i], longitude[l - 1]))
     }
     for (j in 0 until ySize) {
         val l = xSize - 1
         resultLat[0, j] = -(field[1, j] - field[0, j]) /
             earthDistance(
-                Pair(latitude[1], longitude[j]),
-                Pair(latitude[0], longitude[j]))
+                Point(latitude[1], longitude[j]),
+                Point(latitude[0], longitude[j]))
         resultLat[l, j] = -(field[l, j] - field[l - 1, j]) /
             earthDistance(
-                Pair(latitude[l], longitude[j]),
-                Pair(latitude[l - 1], longitude[j]))
+                Point(latitude[l], longitude[j]),
+                Point(latitude[l - 1], longitude[j]))
         if (j != 0 && j != ySize - 1) {
             resultLon[l, j] = (field[l, j + 1] - field[l, j - 1]) /
                 earthDistance(
-                    Pair(latitude[l], longitude[j + 1]),
-                    Pair(latitude[l], longitude[j - 1]))
+                    Point(latitude[l], longitude[j + 1]),
+                    Point(latitude[l], longitude[j - 1]))
             resultLon[0, j] = (field[0, j + 1] - field[0, j - 1]) /
                 earthDistance(
-                    Pair(latitude[0], longitude[j + 1]),
-                    Pair(latitude[0], longitude[j - 1]))
+                    Point(latitude[0], longitude[j + 1]),
+                    Point(latitude[0], longitude[j - 1]))
         }
     }
     return Pair(resultLat, resultLon)

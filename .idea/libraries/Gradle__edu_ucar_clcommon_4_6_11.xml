@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.ucar:clcommon:4.6.11">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/clcommon/4.6.11/18af2ca9665e5a341d0db04027c0d8fa1b8ec1b6/clcommon-4.6.11.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/clcommon/4.6.11/9ebb19da7dcc0c6fa0149e591ab8610471abe848/clcommon-4.6.11-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

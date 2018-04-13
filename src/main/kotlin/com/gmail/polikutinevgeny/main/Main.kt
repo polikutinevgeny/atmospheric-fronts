@@ -5,6 +5,7 @@ import com.gmail.polikutinevgeny.files.FileReader
 import com.gmail.polikutinevgeny.files.GeoBoundaries
 import com.gmail.polikutinevgeny.parameters.HewsonParameterWithVorticity
 import com.gmail.polikutinevgeny.ridgedetection.RidgeDetector
+import com.gmail.polikutinevgeny.utility.earthDistance
 import com.gmail.polikutinevgeny.utility.equivalentPotentialTemperature
 import com.gmail.polikutinevgeny.utility.toCSV
 import java.io.File
@@ -25,12 +26,35 @@ fun main(args: Array<String>) {
     val spechum = fileb.readIsobaricVariable("Specific_humidity_isobaric",
         90000.0, GeoBoundaries(20.0, 70.0, 140.0, 210.0),
         DoubleArrayField.Factory::create)
+
+    //    val sigma = 0.5
+    //    val radius = 2
+    //    temp.gaussianBlur(sigma, radius)
+    //    uwind.gaussianBlur(sigma, radius)
+    //    vwind.gaussianBlur(sigma, radius)
+    //    spechum.gaussianBlur(sigma, radius)
+
     val fp = HewsonParameterWithVorticity(
         equivalentPotentialTemperature(temp, spechum, 900.0), uwind, vwind,
-        0.75 / 10000.0, 2.0 / 100.0, 0.5)
-    val rd = RidgeDetector(0.75 / 10000, 0.0, fp.value, fp.mask)
+        0.75 / 10000.0, 1.0 / 100.0, 0.5)
+    val rd = RidgeDetector(0.36 / 10000.0, 0.0, fp.value, fp.mask)
+    //    val fp = HewsonParameterWithVorticity(
+    //        equivalentPotentialTemperature(temp, spechum, 900.0), uwind, vwind,
+    //        0.25 / 10000.0, 0.5 / 100.0, 0.5)
+    //    val rd = RidgeDetector(0.15 / 10000, 0.0, fp.value, fp.mask)
+
+    //    File("/home/polikutin/NCL/fronts.csv").printWriter().use { out ->
+    //        rd.detectedFronts.forEach {
+    //            out.println(it.toCSV())
+    //        }
+    //    }
+    rd.detectedFronts2.removeAll {
+        it.zipWithNext { a, b ->
+            earthDistance(a, b)
+        }.sum() <= 300
+    }
     File("/home/polikutin/NCL/fronts.csv").printWriter().use { out ->
-        rd.detectedFronts.forEach {
+        rd.detectedFronts2.forEach {
             out.println(it.toCSV())
         }
     }

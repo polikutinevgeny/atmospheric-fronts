@@ -27,7 +27,8 @@ class HewsonParameterWithVorticity(
 
     override val value: FieldInterface = temperature.clone { i, j ->
         -(temperatureGradientVec.first[i, j] * temperatureGradientGradientVec.first[i, j] +
-            temperatureGradientVec.second[i, j] * temperatureGradientGradientVec.second[i, j]) / temperatureGradient[i, j]
+            temperatureGradientVec.second[i, j] * temperatureGradientGradientVec.second[i, j]) / temperatureGradient[i, j] * vorticity[i, j] / coriolis(
+            vorticity.xCoordinates[i])
     }
     override val mask: FieldInterface
         get() = temperature.clone { i, j ->

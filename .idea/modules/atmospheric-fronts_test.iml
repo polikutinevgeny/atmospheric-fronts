@@ -35,40 +35,74 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="atmospheric-fronts_main" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-core:0.29" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2.31" level="project" />
-    <orderEntry type="library" name="Gradle: edu.ucar:cdm:4.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
-    <orderEntry type="library" name="Gradle: edu.ucar:udunits:4.6.1" level="project" />
+    <orderEntry type="library" name="Gradle: edu.ucar:cdm:4.6.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-io:0.29" level="project" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-learning:0.29" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.2.31" level="project" />
-    <orderEntry type="library" name="Gradle: edu.ucar:httpservices:4.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpclient:4.3.6" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:bufr:4.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpcore:4.3.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:clcommon:4.6.1" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:visadCdm:4.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:grib:4.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jdom:jdom2:2.0.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:netcdf4:4.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:opendap:4.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.quartz-scheduler:quartz:2.2.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:2.5.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.guava:guava:18.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-recognition:0.29" level="project" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-sfm:0.29" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:bufr:4.6.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-calibration:0.29" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:clcommon:4.6.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-geo:0.29" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:grib:4.6.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-feature:0.29" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:netcdf4:4.6.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.boofcv:boofcv-ip:0.29" level="project" />
+    <orderEntry type="library" name="Gradle: org.georegression:georegression:0.15" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-runtime:1.2.31" level="project" />
-    <orderEntry type="library" name="Gradle: com.beust:jcommander:1.35" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-jdk14:1.7.25" level="project" />
-    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.7" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.findbugs:jsr305:3.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Gradle: edu.ucar:udunits:4.6.11" level="project" />
+    <orderEntry type="library" name="Gradle: edu.ucar:httpservices:4.6.11" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpmime:4.5.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.amazonaws:aws-java-sdk-s3:1.11.236" level="project" />
+    <orderEntry type="library" name="Gradle: com.amazonaws:aws-java-sdk-kms:1.11.236" level="project" />
+    <orderEntry type="library" name="Gradle: com.amazonaws:aws-java-sdk-core:1.11.236" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpclient:4.5.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.httpcomponents:httpcore:4.4.4" level="project" />
+    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.8.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jdom:jdom2:2.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.quartz-scheduler:quartz:2.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.deepboof:models:0.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.deepboof:io:0.4" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.5.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:18.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.beust:jcommander:1.35" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.7.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.7.9" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.7.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.ddogleg:ddogleg:0.13" level="project" />
+    <orderEntry type="library" name="Gradle: org.yaml:snakeyaml:1.17" level="project" />
+    <orderEntry type="library" name="Gradle: org.deepboof:learning:0.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.deepboof:main:0.4" level="project" />
     <orderEntry type="library" name="Gradle: c3p0:c3p0:0.9.1.1" level="project" />
-    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.1.3" level="project" />
-    <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.6" level="project" />
+    <orderEntry type="library" name="Gradle: com.amazonaws:jmespath-java:1.11.236" level="project" />
+    <orderEntry type="library" name="Gradle: org.ejml:ejml-simple:0.33" level="project" />
+    <orderEntry type="library" name="Gradle: org.ejml:ejml-fdense:0.33" level="project" />
+    <orderEntry type="library" name="Gradle: org.ejml:ejml-dsparse:0.33" level="project" />
+    <orderEntry type="library" name="Gradle: org.ejml:ejml-ddense:0.33" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.sleepycat:je:4.0.92" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jsoup:jsoup:1.7.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:jj2000:5.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: net.java.dev.jna:jna:4.1.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.coverity.security:coverity-escapers:1.1.1" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.wisc.ssec:visad:2.0-20130124" level="project" />
+    <orderEntry type="library" name="Gradle: org.ejml:ejml-cdense:0.33" level="project" />
+    <orderEntry type="library" name="Gradle: org.ejml:ejml-zdense:0.33" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jsoup:jsoup:1.11.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.ejml:ejml-core:0.33" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:jj2000:5.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: net.java.dev.jna:jna:4.2.2" level="project" />
+    <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
+    <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.9" level="project" />
+    <orderEntry type="library" name="Gradle: software.amazon.ion:ion-java:1.0.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.6.7" level="project" />
+    <orderEntry type="library" name="Gradle: org.rauschig:jarchivelib:0.5.0" level="project" />
+    <orderEntry type="library" name="Gradle: net.lingala.zip4j:zip4j:1.3.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-compress:1.7" level="project" />
+    <orderEntry type="library" name="Gradle: org.tukaani:xz:1.4" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="atmospheric-fronts_main" />
 </module>

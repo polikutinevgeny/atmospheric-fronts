@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.ucar:grib:4.6.11">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/grib/4.6.11/70f2b5511c15310895efc80a465b7849ce40712d/grib-4.6.11.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/grib/4.6.11/c47e4dedb0a0d17909b91ce929ab07944ea1d3a/grib-4.6.11-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

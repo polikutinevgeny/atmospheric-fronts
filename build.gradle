@@ -37,7 +37,7 @@ repositories {
     }
 }
 
-def netcdfJavaVersion = "4.6.1"
+def netcdfJavaVersion = "4.6.11"
 def slf4jVersion = "1.7.25"
 
 dependencies {
@@ -50,8 +50,7 @@ dependencies {
     runtime "edu.ucar:clcommon:${netcdfJavaVersion}"
     runtime "edu.ucar:grib:${netcdfJavaVersion}"
     runtime "edu.ucar:netcdf4:${netcdfJavaVersion}"
-    runtime "edu.ucar:opendap:${netcdfJavaVersion}"
-    runtime "edu.ucar:visadCdm:${netcdfJavaVersion}"
+    compile group: 'org.boofcv', name: 'boofcv-core', version: '0.29'
 //    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 

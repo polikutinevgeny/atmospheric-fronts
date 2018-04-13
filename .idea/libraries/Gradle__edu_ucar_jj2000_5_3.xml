@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.ucar:jj2000:5.3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/jj2000/5.3/97675e1aca299b5d1d8a6c5536acc1c3afcd3e53/jj2000-5.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/jj2000/5.3/cc6af68a8c1af1ed5502bc59c4de69329aafa4e5/jj2000-5.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

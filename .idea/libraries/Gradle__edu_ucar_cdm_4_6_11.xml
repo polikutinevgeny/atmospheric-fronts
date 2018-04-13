@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.ucar:cdm:4.6.11">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/cdm/4.6.11/1ea70433e15cd1b6d763ba278b61ea3ac6f9cf4b/cdm-4.6.11.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.ucar/cdm/4.6.11/4b13e0bdaea87a17c6be57c736811808a5427a56/cdm-4.6.11-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
