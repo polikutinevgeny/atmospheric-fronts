@@ -6,9 +6,7 @@ import com.gmail.polikutinevgeny.utility.Front
 import com.gmail.polikutinevgeny.utility.component1
 import com.gmail.polikutinevgeny.utility.component2
 import com.gmail.polikutinevgeny.utility.sphereAngle
-import kotlin.math.acos
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 import java.awt.Point as IntPoint
 import java.awt.geom.Point2D.Double as Point
 
@@ -46,7 +44,7 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
         ridgeDetection2()
     }
 
-    fun ridgeDetection2(radius: Int = 2) {
+    fun ridgeDetection2(radius: Int = 3) {
         detectedFronts2.clear()
         val sups = mutableListOf<IntPoint>()
         val (xSize, ySize) = field.size
@@ -58,11 +56,79 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
         val dirs = mutableListOf<IntPoint>()
         for (dx in -radius..radius) {
             for (dy in -radius..radius) {
-                if (dx != 0 && dy != 0) {
+                if (dx != 0 || dy != 0) {
                     dirs.add(IntPoint(dx, dy))
                 }
             }
         }
+
+        fun line(x0: Int, y0: Int, x1: Int, y1: Int): MutableList<IntPoint> {
+            var x0 = x0
+            var y0 = y0
+
+            val dx = abs(x1 - x0)
+            val sx = if (x0 < x1) 1 else -1
+            val dy = abs(y1 - y0)
+            val sy = if (y0 < y1) 1 else -1
+            var err = (if (dx > dy) dx else -dy) / 2
+            var e2: Int
+
+            val result = mutableListOf<IntPoint>()
+
+            while (true) {
+                result.add(IntPoint(x0, y0))
+                if (x0 == x1 && y0 == y1) break
+                e2 = err
+                if (e2 > -dx) {
+                    err -= dy
+                    x0 += sx
+                }
+                if (e2 < dy) {
+                    err += dx
+                    y0 += sy
+                }
+            }
+            return result
+        }
+
+        fun thickLine(x0: Int, y0: Int, x1: Int,
+                      y1: Int): MutableList<IntPoint> {
+            var x0 = x0
+            var y0 = y0
+            val dx = abs(x1 - x0)
+            val sx = if (x0 < x1) 1 else -1
+            val dy = abs(y1 - y0)
+            val sy = if (y0 < y1) 1 else -1
+            var err = dx - dy
+            var e2: Int
+            var x2: Int
+            val ed = if (dx + dy == 0) 1.0 else sqrt(
+                dx * dx.toDouble() + dy * dy.toDouble())
+
+            val result = mutableListOf<IntPoint>()
+
+            while (true) {
+                result.add(IntPoint(x0, y0))
+                e2 = err
+                x2 = x0
+                if (2 * e2 >= -dx) {
+                    if (x0 == x1) break
+                    if (e2 + dy < ed)
+                        result.add(IntPoint(x0, y0 + sy))
+                    err -= dy
+                    x0 += sx
+                }
+                if (2 * e2 <= dy) {
+                    if (y0 == y1) break
+                    if (dx - e2 < ed)
+                        result.add(IntPoint(x2 + sx, y0))
+                    err += dx
+                    y0 += sy
+                }
+            }
+            return result
+        }
+
         /**
          * Checks value superiority
          *
@@ -107,7 +173,7 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
                 position.x + it.x in 0 until field.size.first &&
                     position.y + it.y in 0 until field.size.second
             }.sortedWith(compareBy(
-                { if (endPoints[position.x + it.x][position.y + it.y] == null) 0 else 1 },
+                { radius - max(abs(it.x), abs(it.y)) },
                 {
                     if (prev == IntPoint(-1, -1))
                         0
@@ -117,30 +183,24 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
                 { count[position.x + it.x][position.y + it.y] },
                 { field[position.x + it.x, position.y + it.y] }
             )).reversed()
-            for (it in candidates) {
+            outer@ for (it in candidates) {
                 val i = position.x + it.x
                 val j = position.y + it.y
-                if (endPoints[i][j] != null) {
-                    val f = endPoints[i][j]!!
-                    if (f !== front) {
-                        if (f.first() == IntPoint(i, j)) {
-                            f.reverse()
-                        }
-                        if (front.size > 1 && (f[f.lastIndex - 1] - f[f.lastIndex]).vecAngle(
-                                front[front.lastIndex - 1] - front[front.lastIndex]) >= 100) {
-                            endPoints[i][j] = null
-                            front.add(IntPoint(i, j))
-                            return IntPoint(i, j)
+                if (ridges[i][j] != 1 && count[i][j] >= 4 && (prev - position).vecAngle(
+                        it) >= 90) {
+                    val segment = line(position.x, position.y, i, j)
+                    for (p in segment.drop(1)) {
+                        if (ridges[p.x][p.y] == 1) {
+                            continue@outer
                         }
                     }
-                } else {
-                    if (ridges[i][j] != 1 && count[i][j] >= 4 && (prev - position).vecAngle(
-                            it) >= 100) {
-                        ridges[i][j] = 1
-                        front.add(IntPoint(i, j))
-                        ridgeFilterWalk(IntPoint(i, j), position, front)
-                        return IntPoint(i, j)
+                    val thickSegment = thickLine(position.x, position.y, i, j)
+                    for (p in thickSegment) {
+                        ridges[p.x][p.y] = 1
                     }
+                    front.add(IntPoint(i, j))
+                    ridgeFilterWalk(IntPoint(i, j), position, front)
+                    return IntPoint(i, j)
                 }
             }
             if (prev != IntPoint(-1, -1)) {
@@ -215,16 +275,14 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
                 continue
             }
             ridges[start.x][start.y] = 1
-            var front = mutableListOf(start)
+            val front = mutableListOf(start)
             val last = ridgeFilterWalk(start, IntPoint(-1, -1), front)
-            //            front = fs.ramerDouglasPeucker(front, eps)
             front.reverse()
             ridgeFilterWalk(start, last, front)
             if (front.size >= 2) {
-                //                detectedFronts2.add(fs.ramerDouglasPeucker(front, eps))
-                detectedFronts2.add(front.map {
+                detectedFronts2.add(fs.ramerDouglasPeucker(front.map {
                     Point(field.xCoordinates[it.x], field.yCoordinates[it.y])
-                }.toMutableList())
+                }.toMutableList(), eps))
             }
         }
     }

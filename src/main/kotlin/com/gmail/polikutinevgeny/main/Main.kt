@@ -51,7 +51,7 @@ fun main(args: Array<String>) {
     rd.detectedFronts2.removeAll {
         it.zipWithNext { a, b ->
             earthDistance(a, b)
-        }.sum() <= 300
+        }.sum() <= 300 || earthDistance(it.first(), it.last()) <= 300
     }
     File("/home/polikutin/NCL/fronts.csv").printWriter().use { out ->
         rd.detectedFronts2.forEach {
