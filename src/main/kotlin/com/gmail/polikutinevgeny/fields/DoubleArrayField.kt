@@ -1,7 +1,7 @@
 package com.gmail.polikutinevgeny.fields
 
-import boofcv.alg.filter.blur.GBlurImageOps
-import boofcv.struct.image.GrayF64
+//import boofcv.alg.filter.blur.GBlurImageOps
+//import boofcv.struct.image.GrayF64
 
 class DoubleArrayField(override val xCoordinates: DoubleArray,
                        override val yCoordinates: DoubleArray,
@@ -43,16 +43,16 @@ class DoubleArrayField(override val xCoordinates: DoubleArray,
     override operator fun set(i: Int, j: Int, value: Double) {
         data[i * yCoordinates.size + j] = value
     }
-
-    fun toBoofCVImage(): GrayF64 {
-        val res = GrayF64(xCoordinates.size, yCoordinates.size)
-        res.setData(data)
-        return res
-    }
-
-    fun gaussianBlur(sigma: Double, radius: Int) {
-        val temp = toBoofCVImage()
-        val res = GBlurImageOps.gaussian(temp, null, sigma, radius, null)
-        data = res.getData()
-    }
+    //
+    //    fun toBoofCVImage(): GrayF64 {
+    //        val res = GrayF64(xCoordinates.size, yCoordinates.size)
+    //        res.setData(data)
+    //        return res
+    //    }
+    //
+    //    fun gaussianBlur(sigma: Double, radius: Int) {
+    //        val temp = toBoofCVImage()
+    //        val res = GBlurImageOps.gaussian(temp, null, sigma, radius, null)
+    //        data = res.getData()
+    //    }
 }

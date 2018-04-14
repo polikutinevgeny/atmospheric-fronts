@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id 'com.github.johnrengelman.plugin-shadow' version '2.0.2'
+    id 'com.github.johnrengelman.plugin-shadow' version '2.0.3'
 }
 
 group 'com.gmail.polikutinevgeny'
@@ -21,6 +21,7 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'application'
 
 dokka {
     outputFormat = 'html'
@@ -46,11 +47,12 @@ dependencies {
     runtime "org.jetbrains.kotlin:kotlin-runtime:$kotlin_version"
     implementation "edu.ucar:cdm:${netcdfJavaVersion}"
     runtime "org.slf4j:slf4j-jdk14:${slf4jVersion}"
-    runtime "edu.ucar:bufr:${netcdfJavaVersion}"
-    runtime "edu.ucar:clcommon:${netcdfJavaVersion}"
+//    runtime "edu.ucar:bufr:${netcdfJavaVersion}"
+//    runtime "edu.ucar:clcommon:${netcdfJavaVersion}"
     runtime "edu.ucar:grib:${netcdfJavaVersion}"
-    runtime "edu.ucar:netcdf4:${netcdfJavaVersion}"
-    compile group: 'org.boofcv', name: 'boofcv-core', version: '0.29'
+//    runtime "edu.ucar:netcdf4:${netcdfJavaVersion}"
+//    implementation group: 'org.boofcv', name: 'boofcv-core', version: '0.29'
+    implementation "com.xenomachina:kotlin-argparser:2.0.6"
 //    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
@@ -63,12 +65,15 @@ compileTestKotlin {
 
 jar {
     manifest {
-        attributes 'Main-Class': 'com.gmail.polikutinevgeny.main'
+        attributes 'Main-Class': 'com.gmail.polikutinevgeny.main.MainKt'
     }
 }
 
 shadowJar {
+    zip64 true
     manifest {
         attributes 'Main-Class': 'com.gmail.polikutinevgeny.main.MainKt'
     }
 }
+
+mainClassName = 'com.gmail.polikutinevgeny.main.MainKt'

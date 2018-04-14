@@ -22,7 +22,8 @@ private operator fun IntPoint.minus(other: IntPoint): IntPoint {
 }
 
 class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
-                    val field: FieldInterface, var mask: FieldInterface) {
+                    val field: FieldInterface, var mask: FieldInterface,
+                    var searchRadius: Int, var minAngle: Double) {
     companion object {
         /**
          * Moving directions (counterclockwise!)
@@ -44,7 +45,7 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
         ridgeDetection2()
     }
 
-    fun ridgeDetection2(radius: Int = 3) {
+    fun ridgeDetection2() {
         detectedFronts2.clear()
         val sups = mutableListOf<IntPoint>()
         val (xSize, ySize) = field.size
@@ -54,8 +55,8 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
             { _ -> Array<MutableList<IntPoint>?>(ySize, { _ -> null }) })
 
         val dirs = mutableListOf<IntPoint>()
-        for (dx in -radius..radius) {
-            for (dy in -radius..radius) {
+        for (dx in -searchRadius..searchRadius) {
+            for (dy in -searchRadius..searchRadius) {
                 if (dx != 0 || dy != 0) {
                     dirs.add(IntPoint(dx, dy))
                 }
@@ -173,7 +174,7 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
                 position.x + it.x in 0 until field.size.first &&
                     position.y + it.y in 0 until field.size.second
             }.sortedWith(compareBy(
-                { radius - max(abs(it.x), abs(it.y)) },
+                { searchRadius - max(abs(it.x), abs(it.y)) },
                 {
                     if (prev == IntPoint(-1, -1))
                         0
@@ -187,7 +188,7 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
                 val i = position.x + it.x
                 val j = position.y + it.y
                 if (ridges[i][j] != 1 && count[i][j] >= 4 && (prev - position).vecAngle(
-                        it) >= 90) {
+                        it) >= minAngle) {
                     val segment = line(position.x, position.y, i, j)
                     for (p in segment.drop(1)) {
                         if (ridges[p.x][p.y] == 1) {
