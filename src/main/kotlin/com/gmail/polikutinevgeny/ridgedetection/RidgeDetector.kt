@@ -23,7 +23,8 @@ private operator fun IntPoint.minus(other: IntPoint): IntPoint {
 
 class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
                     val field: FieldInterface, var mask: FieldInterface,
-                    var searchRadius: Int, var minAngle: Double) {
+                    var searchRadius: Int, var minAngle: Double,
+                    var lookback: Int) {
     companion object {
         /**
          * Moving directions (counterclockwise!)
@@ -187,8 +188,16 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
             outer@ for (it in candidates) {
                 val i = position.x + it.x
                 val j = position.y + it.y
-                if (ridges[i][j] != 1 && count[i][j] >= 4 && (prev - position).vecAngle(
-                        it) >= minAngle) {
+                var correct = true
+                for (off in 1..lookback) {
+                    if (front.lastIndex < off || !correct) {
+                        break
+                    }
+                    correct = correct && it.vecAngle(
+                        front[front.lastIndex - off] - front[front.lastIndex - off + 1]) >= minAngle
+                }
+                if (ridges[i][j] != 1 && count[i][j] >= 4 &&
+                    (prev - position).vecAngle(it) >= minAngle && correct) {
                     val segment = line(position.x, position.y, i, j)
                     for (p in segment.drop(1)) {
                         if (ridges[p.x][p.y] == 1) {
@@ -198,6 +207,9 @@ class RidgeDetector(var upperThreshold: Double, var lowerThreshold: Double,
                     val thickSegment = thickLine(position.x, position.y, i, j)
                     for (p in thickSegment) {
                         ridges[p.x][p.y] = 1
+                    }
+                    if ((position - prev).vecAngle(it) == 10.0) {
+                        front.removeAt(front.lastIndex)
                     }
                     front.add(IntPoint(i, j))
                     ridgeFilterWalk(IntPoint(i, j), position, front)

@@ -67,44 +67,57 @@ class MyArgs(parser: ArgParser) {
     val searchRadius by parser.storing(
         "--searchradius",
         help = "search radius for fronts"
+    ) { toInt() }.default(2)
+
+    val lookback by parser.storing(
+        "--lookback",
+        help = "lookback for fronts curve"
     ) { toInt() }.default(3)
 
     val minAngle by parser.storing(
-        "--minAngle",
+        "--minangle",
         help = "minimal possible angle of front line"
     ) { toDouble() }.default(90.0)
+
+    val minLength by parser.storing(
+        "--minlength",
+        help = "minimal possible front length in kilometers"
+    ) { toDouble() }.default(500.0)
 }
 
 fun main(args: Array<String>) = mainBody {
     val parsedArgs = ArgParser(args).parseInto(::MyArgs)
     parsedArgs.run {
         val openedfile = FileReader(input)
+        val boundaries = GeoBoundaries(minLat, maxLat, minLon, maxLon)
         val temp = openedfile.readIsobaricVariable("Temperature_isobaric",
             isobaric,
-            GeoBoundaries(minLat, maxLat, minLon, maxLon),
+            boundaries,
             DoubleArrayField.Factory::create)
         val uwind = openedfile.readIsobaricVariable(
             "u-component_of_wind_isobaric", isobaric,
-            GeoBoundaries(minLat, maxLat, minLon, maxLon),
+            boundaries,
             DoubleArrayField.Factory::create)
         val vwind = openedfile.readIsobaricVariable(
             "v-component_of_wind_isobaric", isobaric,
-            GeoBoundaries(minLat, maxLat, minLon, maxLon),
+            boundaries,
             DoubleArrayField.Factory::create)
         val spechum = openedfile.readIsobaricVariable(
             "Specific_humidity_isobaric", isobaric,
-            GeoBoundaries(minLat, maxLat, minLon, maxLon),
+            boundaries,
             DoubleArrayField.Factory::create)
         val fp = HewsonParameterWithVorticity(
             equivalentPotentialTemperature(temp, spechum, isobaric / 100),
             uwind, vwind,
             tfpThreshold, gradientThreshold, vorticityThreshold)
-        val rd = RidgeDetector(tfpThreshold * vorticityThreshold, 0.0, fp.value,
-            fp.mask, searchRadius, minAngle)
+        val rd = RidgeDetector(tfpThreshold * vorticityThreshold,
+            tfpThreshold * vorticityThreshold / 2, fp.value,
+            fp.mask, searchRadius, minAngle, lookback)
         rd.detectedFronts2.removeAll {
             it.zipWithNext { a, b ->
                 earthDistance(a, b)
-            }.sum() <= 300 || earthDistance(it.first(), it.last()) <= 300
+            }.sum() <= minLength || earthDistance(it.first(),
+                it.last()) <= minLength
         }
         File(output).printWriter().use { out ->
             rd.detectedFronts2.forEach {

@@ -77,3 +77,13 @@ shadowJar {
 }
 
 mainClassName = 'com.gmail.polikutinevgeny.main.MainKt'
+
+run {
+    workingDir = '/home/polikutin/Datasets/2018.03.17.00/'
+    args = ['-i', 'input.grb', '--minlat', '20', '--maxlat', '70', '--minlon',
+            '140', '--maxlon', '210', '-o', 'fronts.csv', '--minangle', '90', '--searchradius', '3']
+}
+
+installDist {
+    destinationDir = file('/home/polikutin/Datasets/app')
+}
