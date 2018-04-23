@@ -36,4 +36,11 @@ class HewsonParameterWithVorticity(
                 temperatureGradient[i, j] + 100 * temperatureGradientGradient[i, j] / sqrt(2.0) >= gradientThreshold &&
                 vorticity[i, j] / coriolis(vorticity.xCoordinates[i]) > vorticityThreshold) 1.0 else 0.0
             }
+
+    val classification: FieldInterface
+        get() = temperature.clone { i, j ->
+            //WARNING: are u/v directions right?
+            val a = -(vWind[i, j] * temperatureGradientVec.first[i, j] + uWind[i, j] * temperatureGradientVec.second[i, j])
+            if (a > 0) 1.0 else -1.0
+        }
 }

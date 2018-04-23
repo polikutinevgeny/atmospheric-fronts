@@ -5,9 +5,7 @@ import com.gmail.polikutinevgeny.files.FileReader
 import com.gmail.polikutinevgeny.files.GeoBoundaries
 import com.gmail.polikutinevgeny.parameters.HewsonParameterWithVorticity
 import com.gmail.polikutinevgeny.ridgedetection.RidgeDetector
-import com.gmail.polikutinevgeny.utility.earthDistance
-import com.gmail.polikutinevgeny.utility.equivalentPotentialTemperature
-import com.gmail.polikutinevgeny.utility.toCSV
+import com.gmail.polikutinevgeny.utility.*
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.default
 import com.xenomachina.argparser.mainBody
@@ -46,13 +44,13 @@ class MyArgs(parser: ArgParser) {
 
     val tfpThreshold by parser.storing(
         "--tfpt",
-        help = "TFP threshold"
-    ) { toDouble() }.default(0.75 / 10000)
+        help = "TFP threshold (K/(100km)^2)"
+    ) { toDouble() / 10000.0 }.default(0.75 / 10000.0)
 
     val gradientThreshold by parser.storing(
         "--gradt",
-        help = "gradient threshold"
-    ) { toDouble() }.default(1.0 / 100.0)
+        help = "gradient threshold (K/100km)"
+    ) { toDouble() / 100.0 }.default(1.0 / 100.0)
 
     val vorticityThreshold by parser.storing(
         "--vortt",
@@ -83,6 +81,16 @@ class MyArgs(parser: ArgParser) {
         "--minlength",
         help = "minimal possible front length in kilometers"
     ) { toDouble() }.default(500.0)
+
+    val maskOutput by parser.storing(
+        "--maskoutput",
+        help = "mask output path"
+    ).default("")
+
+    val maskAreasOutput by parser.storing(
+        "--maskareasoutput",
+        help = "mask areas output path"
+    ).default("")
 }
 
 fun main(args: Array<String>) = mainBody {
@@ -110,18 +118,76 @@ fun main(args: Array<String>) = mainBody {
             equivalentPotentialTemperature(temp, spechum, isobaric / 100),
             uwind, vwind,
             tfpThreshold, gradientThreshold, vorticityThreshold)
+        //        val fp = HewsonParameterWithVorticity(
+        //            temp,
+        //            uwind, vwind,
+        //            tfpThreshold, gradientThreshold, vorticityThreshold)
         val rd = RidgeDetector(tfpThreshold * vorticityThreshold,
             tfpThreshold * vorticityThreshold / 2, fp.value,
-            fp.mask, searchRadius, minAngle, lookback)
+            fp.mask, searchRadius, minAngle, lookback, fp.classification)
+        //        rd.ridgeDetectionGradient(equivalentPotentialTemperature(temp, spechum, isobaric / 100))
+
         rd.detectedFronts2.removeAll {
             it.zipWithNext { a, b ->
                 earthDistance(a, b)
             }.sum() <= minLength || earthDistance(it.first(),
                 it.last()) <= minLength
         }
+
+        //        rd.detectedFronts.removeAll {
+        //            it.zipWithNext { a, b ->
+        //                earthDistance(a, b)
+        //            }.sum() <= minLength || earthDistance(it.first(),
+        //                it.last()) <= minLength
+        //        }
+        //
+        //        rd.detectedFrontsThinning.removeAll {
+        //            it.zipWithNext { a, b ->
+        //                earthDistance(a, b)
+        //            }.sum() <= minLength || earthDistance(it.first(),
+        //                it.last()) <= minLength
+        //        }
+
+        //        rd.detectedFrontsGradient.removeAll {
+        //            it.zipWithNext { a, b ->
+        //                earthDistance(a, b)
+        //            }.sum() <= minLength || earthDistance(it.first(),
+        //                it.last()) <= minLength
+        //        }
+
         File(output).printWriter().use { out ->
+            //            rd.detectedFronts.forEach {
+            //                out.println(it.toCSV())
+            //            }
+            //            out.println("0.0, 0.0")
+            //            rd.detectedFrontsThinning.forEach {
+            //                out.print("1.0, ")
+            //                out.println(it.toCSV())
+            //            }
+            //            out.println("1.0, 1.0")
+
             rd.detectedFronts2.forEach {
                 out.println(it.toCSV())
+            }
+
+            //            rd.detectedFrontsGradient.forEach {
+            //                out.println(it.toCSV())
+            //            }
+        }
+
+        if (maskOutput != "") {
+            File(maskOutput).printWriter().use { out ->
+                out.println(
+                    fp.mask.maskToCSVWithClassification(fp.classification))
+            }
+        }
+
+        if (maskAreasOutput != "") {
+            val maskAreas = maskAreas(fp.mask, fp.classification)
+            File(maskAreasOutput).printWriter().use { out ->
+                maskAreas.forEach {
+                    out.println(it.toCSV())
+                }
             }
         }
     }

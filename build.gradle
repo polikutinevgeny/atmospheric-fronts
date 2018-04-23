@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.31'
+    ext.kotlin_version = '1.2.40'
 
     repositories {
         mavenCentral()
@@ -81,9 +81,11 @@ mainClassName = 'com.gmail.polikutinevgeny.main.MainKt'
 run {
     workingDir = '/home/polikutin/Datasets/2018.03.17.00/'
     args = ['-i', 'input.grb', '--minlat', '20', '--maxlat', '70', '--minlon',
-            '140', '--maxlon', '210', '-o', 'fronts.csv', '--minangle', '90', '--searchradius', '3']
+            '110', '--maxlon', '180', '-o', 'fronts.csv', '--minangle', '90', '--searchradius', '3',
+            '--lookback', '2', '--minlength', '200', '--isobaric', '85000', '--maskoutput', 'mask.csv']
 }
 
 installDist {
-    destinationDir = file('/home/polikutin/Datasets/app')
+//    destinationDir = file('/home/polikutin/Datasets/app')
+    destinationDir = file('/run/media/polikutin/External/Фронты/app')
 }

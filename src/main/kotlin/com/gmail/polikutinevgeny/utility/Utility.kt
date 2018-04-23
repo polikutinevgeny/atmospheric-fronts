@@ -260,12 +260,45 @@ fun vecVorticity(ufield: FieldInterface,
     return result
 }
 
-typealias Front = MutableList<Point2D.Double>
+//typealias Front = MutableList<Point2D.Double>
+class Front(p0: MutableCollection<out Point2D.Double>?, val temp: Double) :
+    ArrayList<Point2D.Double>(p0) {
+
+}
 
 fun Front.toCSV(): String {
+    var s = "${this.temp}, ${this.first().x}, ${this.first().y}"
+    for (c in this.asSequence().drop(1)) {
+        s += ", ${c.x}, ${c.y}"
+    }
+    return s
+}
+
+fun MutableList<Point>.toCSV(): String {
     var s = "${this.first().x}, ${this.first().y}"
     for (c in this.asSequence().drop(1)) {
         s += ", ${c.x}, ${c.y}"
     }
     return s
+}
+
+fun FieldInterface.maskToCSVWithClassification(
+    classification: FieldInterface): String {
+    var s = ""
+    for (i in 0..xCoordinates.lastIndex) {
+        for (j in 0..yCoordinates.lastIndex) {
+            if (this[i, j] > 0 && classification[i, j] == -1.0) {
+                s += "${xCoordinates[i]}, ${yCoordinates[j]},"
+            }
+        }
+    }
+    s = s.dropLast(1) + "\n"
+    for (i in 0..xCoordinates.lastIndex) {
+        for (j in 0..yCoordinates.lastIndex) {
+            if (this[i, j] > 0 && classification[i, j] == 1.0) {
+                s += "${xCoordinates[i]}, ${yCoordinates[j]},"
+            }
+        }
+    }
+    return s.dropLast(1)
 }
