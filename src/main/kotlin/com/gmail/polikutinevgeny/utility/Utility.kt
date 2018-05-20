@@ -1,23 +1,41 @@
 package com.gmail.polikutinevgeny.utility
 
 import com.gmail.polikutinevgeny.fields.FieldInterface
-import java.awt.geom.Point2D
 import kotlin.math.*
+import java.awt.Point as IntPoint
 import java.awt.geom.Point2D.Double as Point
 
-operator fun java.awt.Point.component1(): Int {
+operator fun Point.component1(): Double {
     return this.x
 }
 
-operator fun java.awt.Point.component2(): Int {
+operator fun Point.component2(): Double {
     return this.y
 }
 
-operator fun java.awt.geom.Point2D.Double.component1(): Double {
+fun IntPoint.vecAngle(other: IntPoint): Double {
+    val n = (this.x * other.x + this.y * other.y).toDouble()
+    val d = sqrt((this.x.toDouble().pow(2) + this.y.toDouble().pow(
+        2)) * (other.x.toDouble().pow(2) + other.y.toDouble().pow(2)))
+    return Math.toDegrees(acos(n / d))
+}
+
+fun IntPoint.vecAngle(other: Point): Double {
+    val n = (this.x * other.x + this.y * other.y)
+    val d = sqrt((this.x.toDouble().pow(2) + this.y.toDouble().pow(
+        2)) * (other.x.pow(2) + other.y.pow(2)))
+    return Math.toDegrees(acos(n / d))
+}
+
+operator fun IntPoint.minus(other: IntPoint): java.awt.Point {
+    return java.awt.Point(this.x - other.x, this.y - other.y)
+}
+
+operator fun IntPoint.component1(): Int {
     return this.x
 }
 
-operator fun java.awt.geom.Point2D.Double.component2(): Double {
+operator fun IntPoint.component2(): Int {
     return this.y
 }
 
@@ -246,7 +264,7 @@ fun gradientAbs(field: FieldInterface): FieldInterface =
  *
  * */
 fun vecVorticity(ufield: FieldInterface,
-                      vfield: FieldInterface): FieldInterface {
+                 vfield: FieldInterface): FieldInterface {
     val result = ufield.clone()
     val (latu, _) = gradient(ufield)
     val (_, lonv) = gradient(vfield)
@@ -260,9 +278,8 @@ fun vecVorticity(ufield: FieldInterface,
     return result
 }
 
-//typealias Front = MutableList<Point2D.Double>
-class Front(p0: MutableCollection<out Point2D.Double>?, val temp: Double) :
-    ArrayList<Point2D.Double>(p0) {
+class Front(p0: MutableCollection<out Point>?, val temp: Double) :
+    ArrayList<Point>(p0) {
 
 }
 

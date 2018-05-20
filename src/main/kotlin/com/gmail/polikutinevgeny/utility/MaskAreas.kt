@@ -38,7 +38,7 @@ fun maskAreas(mask: FieldInterface,
                         }
                     }
                 }
-                if (list.size > 10) {
+                if (list.size > 4) {
                     result.add(list)
                 }
             }
