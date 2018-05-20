@@ -281,22 +281,13 @@ fun vecVorticity(ufield: FieldInterface,
 class Front(p0: MutableCollection<out Point>?, val temp: Double) :
     ArrayList<Point>(p0) {
 
-}
-
-fun Front.toCSV(): String {
-    var s = "${this.temp}, ${this.first().x}, ${this.first().y}"
-    for (c in this.asSequence().drop(1)) {
-        s += ", ${c.x}, ${c.y}"
+    fun toCSV(): String {
+        var s = "${this.temp}, ${this.first().x}, ${this.first().y}"
+        for (c in this.asSequence().drop(1)) {
+            s += ", ${c.x}, ${c.y}"
+        }
+        return s
     }
-    return s
-}
-
-fun MutableList<Point>.toCSV(): String {
-    var s = "${this.first().x}, ${this.first().y}"
-    for (c in this.asSequence().drop(1)) {
-        s += ", ${c.x}, ${c.y}"
-    }
-    return s
 }
 
 fun FieldInterface.maskToCSVWithClassification(

@@ -2,7 +2,6 @@ package com.gmail.polikutinevgeny.frontutils
 
 import java.awt.geom.Point2D.Double as Point
 
-//TODO: Rewrite to spherical distance
 class FrontSimplifier {
     private fun perpendicularDistance(pt: Point, lineStart: Point, lineEnd: Point): Double {
         var dx = lineEnd.x - lineStart.x

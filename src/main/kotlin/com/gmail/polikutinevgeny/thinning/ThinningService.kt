@@ -75,8 +75,6 @@ class ThinningService {
         return temp
     }
 
-    //    private fun b(input: Array<IntArray>, x: Int, y: Int): Int =
-    //        Array(8, { k -> position(input, x, y, k + 2) }).sum()
     private fun b(input: Array<IntArray>, x: Int, y: Int): Int =
         DIRECTIONS.drop(1).count {
             position(input, x + it.first, y + it.second, 1) == 1
