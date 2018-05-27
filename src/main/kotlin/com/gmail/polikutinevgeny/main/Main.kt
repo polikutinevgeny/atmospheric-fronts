@@ -21,19 +21,19 @@ fun main(args: Array<String>) = mainBody {
         val temp = openedfile.readIsobaricVariable("Temperature_isobaric",
             isobaric,
             boundaries,
-            DoubleArrayField.Factory::create)
+            ::DoubleArrayField)
         val uwind = openedfile.readIsobaricVariable(
             "u-component_of_wind_isobaric", isobaric,
             boundaries,
-            DoubleArrayField.Factory::create)
+            ::DoubleArrayField)
         val vwind = openedfile.readIsobaricVariable(
             "v-component_of_wind_isobaric", isobaric,
             boundaries,
-            DoubleArrayField.Factory::create)
+            ::DoubleArrayField)
         val spechum = openedfile.readIsobaricVariable(
             "Specific_humidity_isobaric", isobaric,
             boundaries,
-            DoubleArrayField.Factory::create)
+            ::DoubleArrayField)
         val fp = HewsonParameterWithVorticity(
             equivalentPotentialTemperature(temp, spechum, isobaric / 100),
             uwind, vwind,
