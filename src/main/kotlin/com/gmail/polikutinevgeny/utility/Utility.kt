@@ -58,11 +58,24 @@ object Constants {
     /**
      * Earth rotation rate.
      *
-     *
      * */
     const val EARTH_ROTATION_RATE: Double = 7.2921e-5
 }
 
+/**
+ * Equivalent potential temperature approximation.
+ *
+ * Calculates air equivalent potential temperature approximation.
+ * @see <a href="https://journals.ametsoc.org/doi/abs/10.1175/1520-0493%281980%29108%3C1046%3ATCOEPT%3E2.0.CO%3B2">
+ *     The Computation of Equivalent Potential Temperature</a>
+ *
+ * @param [temperature] Air temperature field.
+ * @param [specHumidity] Air specific humidity field.
+ * @param [pressure] Air pressure (isobaric surface).
+ *
+ * @author Evgeny Polikutin
+ *
+ */
 fun equivalentPotentialTemperature(temperature: FieldInterface,
                                    specHumidity: FieldInterface,
                                    pressure: Double): FieldInterface {
@@ -156,9 +169,9 @@ fun coriolis(lat: Double): Double {
 /**
  * Vector of gradient of a scalar field on the Earth surface.
  *
- * Calculates the gradient of a scalar field on the Earth surface. Input data are assumed to have correct dimensions.
+ * Calculates the gradient of a scalar field on the Earth surface.
  *
- * @param [field] 2D array [lat, lon] containing the scalar field.
+ * @param [field] The scalar field.
  *
  * @author Evgeny Polikutin
  *
@@ -226,6 +239,16 @@ fun gradient(field: FieldInterface): Pair<FieldInterface, FieldInterface> {
     return Pair(resultLat, resultLon)
 }
 
+/**
+ * Absolute value of a vector field.
+ *
+ * Calculates the absolute value of a vector field.
+ *
+ * @param [vecField] Pair of fields containing latitudal and longitudal components.
+ *
+ * @author Evgeny Polikutin
+ *
+ */
 fun absValue(vecField: Pair<FieldInterface, FieldInterface>): FieldInterface {
     val (lat, lon) = vecField
     val result = lat.clone()
@@ -255,10 +278,9 @@ fun gradientAbs(field: FieldInterface): FieldInterface =
  * Vorticity of a vector field on the Earth surface.
  *
  * Calculates the relative vorticity of a vector field on the Earth surface.
- * Input data are assumed to have correct dimensions.
  *
- * @param [ufield] 2D array [lat, lon] containing the u-component field.
- * @param [vfield] 2D array [lat, lon] containing the v-component field.
+ * @param [ufield] The u-component field.
+ * @param [vfield] The v-component field.
  *
  * @author Evgeny Polikutin
  *
@@ -278,35 +300,3 @@ fun vecVorticity(ufield: FieldInterface,
     return result
 }
 
-class Front(p0: MutableCollection<out Point>?, val temp: Double) :
-    ArrayList<Point>(p0) {
-
-    fun toCSV(): String {
-        var s = "${this.temp}, ${this.first().x}, ${this.first().y}"
-        for (c in this.asSequence().drop(1)) {
-            s += ", ${c.x}, ${c.y}"
-        }
-        return s
-    }
-}
-
-fun FieldInterface.maskToCSVWithClassification(
-    classification: FieldInterface): String {
-    var s = ""
-    for (i in 0..xCoordinates.lastIndex) {
-        for (j in 0..yCoordinates.lastIndex) {
-            if (this[i, j] > 0 && classification[i, j] == -1.0) {
-                s += "${xCoordinates[i]}, ${yCoordinates[j]},"
-            }
-        }
-    }
-    s = s.dropLast(1) + "\n"
-    for (i in 0..xCoordinates.lastIndex) {
-        for (j in 0..yCoordinates.lastIndex) {
-            if (this[i, j] > 0 && classification[i, j] == 1.0) {
-                s += "${xCoordinates[i]}, ${yCoordinates[j]},"
-            }
-        }
-    }
-    return s.dropLast(1)
-}
