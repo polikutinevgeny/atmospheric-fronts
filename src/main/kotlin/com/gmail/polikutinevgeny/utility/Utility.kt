@@ -49,7 +49,7 @@ object Constants {
     /**
      * Scale for the temperature gradient.
      *
-     * @see <a href="http://dx.doi.org/10.1002/2017GL073662">
+     * @see <a href="https://doi.org/10.1002/2017GL073662">
      *     A simple diagnostic for the detection of atmospheric fronts<\a>
      *
      * */
